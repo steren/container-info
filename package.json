@@ -1,7 +1,7 @@
 {
-  "name": "knative-serving-helloworld",
+  "name": "container-info",
   "version": "1.0.0",
-  "description": "Simple hello world sample in Node",
+  "description": "Return some memory, CPU and cgroup info about the current container",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
