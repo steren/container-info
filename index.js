@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     try {
       cgroup[f] = fs.readFileSync(f, 'utf8');
     } catch(e) {
-      console.error(`Cannot read cgroup info for `${f}`, e);
+      console.error(`Cannot read cgroup info for ${f}`, e);
     }
   } 
 
