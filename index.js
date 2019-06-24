@@ -17,13 +17,13 @@ app.get('/', (req, res) => {
       ]
 
   let cgroup = {};
-  try {
-    for (let f of files) {
-        cgroup[f] = fs.readFileSync(f, 'utf8');
+  for (let f of files) {
+    try {
+      cgroup[f] = fs.readFileSync(f, 'utf8');
+    } catch(e) {
+      console.error(`Cannot read cgroup info for `${f}`, e);
     }
-  } catch(e) {
-      console.error("cannot read cgroup info");
-  }
+  } 
 
   let memory = {
       freemem: os.freemem(),
