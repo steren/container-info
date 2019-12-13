@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
       "/sys/fs/cgroup/cpu/cpuacct.usage",
       "/sys/fs/cgroup/cpu/cpu.shares",
       "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+      "/sys/fs/cgroup/cpu/cpu.cfs_period_us",
       ]
 
   let cgroup = {};
