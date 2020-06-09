@@ -36,7 +36,9 @@ app.get('/', (req, res) => {
 
   let username = os.userInfo().username
 
-  res.send({cgroup, memory, cpus, username});
+  let product_name = fs.readFileSync('/sys/class/dmi/id/product_name', 'utf8');
+
+  res.send({cgroup, memory, cpus, username, product_name});
 });
 
 const port = process.env.PORT || 8080;
