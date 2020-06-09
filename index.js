@@ -36,7 +36,12 @@ app.get('/', (req, res) => {
 
   let username = os.userInfo().username
 
-  let product_name = fs.readFileSync('/sys/class/dmi/id/product_name', 'utf8');
+  let product_name;
+  try {
+    product_name = fs.readFileSync('/sys/class/dmi/id/product_name', 'utf8');
+  } catch(e) {
+    console.error(`Cannot read /sys/class/dmi/id/product_name`, e);
+  }
 
   res.send({cgroup, memory, cpus, username, product_name});
 });
