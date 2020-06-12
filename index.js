@@ -11,8 +11,6 @@ function handle(signal) {
 
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
-process.on('SIGKILL', handle);
-process.on('SIGSTOP', handle);
 
 app.get('/', (req, res) => {
   console.log('Received a request.');
