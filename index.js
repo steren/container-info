@@ -6,7 +6,7 @@ const os = require("os");
 const process = require('process');
 
 function handle(signal) {
-  console.log(`Received ${signal}`);
+  console.log(`Received signal ${signal}`);
 }
 
 process.on('SIGINT', handle);
