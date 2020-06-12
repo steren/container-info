@@ -5,6 +5,15 @@ const fs = require('fs');
 const os = require("os");
 const process = require('process');
 
+function handle(signal) {
+  console.log(`Received ${signal}`);
+}
+
+process.on('SIGINT', handle);
+process.on('SIGTERM', handle);
+process.on('SIGKILL', handle);
+process.on('SIGSTOP', handle);
+
 app.get('/', (req, res) => {
   console.log('Received a request.');
 
