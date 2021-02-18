@@ -49,8 +49,10 @@ app.get('/', (req, res) => {
   } catch(e) {
     console.error(`Cannot read /sys/class/dmi/id/product_name`, e);
   }
+  
+  let env = process.env;
 
-  res.send({cgroup, memory, cpus, username, product_name});
+  res.send({cgroup, memory, cpus, username, product_name, env});
 });
 
 const port = process.env.PORT || 8080;
