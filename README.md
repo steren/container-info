@@ -6,3 +6,4 @@ Info returned:
 * Memory of the host node
 * cgroup info: memory
 * current user
+* env vars
