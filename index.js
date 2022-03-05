@@ -3,6 +3,7 @@ const app = express();
 
 const fs = require('fs');
 const os = require("os");
+const v8 = require("v8");
 const process = require('process');
 
 function handle(signal) {
@@ -52,7 +53,9 @@ app.get('/', (req, res) => {
   
   let env = process.env;
 
-  res.send({cgroup, memory, cpus, username, product_name, env});
+  let heapinfo = v8.getHeapStatistics();
+
+  res.send({cgroup, memory, heapinfo, cpus, username, product_name, env});
 });
 
 const port = process.env.PORT || 8080;
