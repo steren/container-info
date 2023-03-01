@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-const fs = require('fs');
-const os = require("os");
-const v8 = require("v8");
-const process = require('process');
+const fs = require('node:fs');
+const os = require("node:os");
+const v8 = require("node:v8");
+const process = require('node:process');
 
 function handle(signal) {
   console.log(`Received signal ${signal}`);
@@ -41,6 +41,7 @@ app.get('/', (req, res) => {
   };
 
   let cpus = os.cpus();
+  let availableParallelism = os.availableParallelism();
 
   let username = os.userInfo().username
 
@@ -55,7 +56,9 @@ app.get('/', (req, res) => {
 
   let heapinfo = v8.getHeapStatistics();
 
-  res.send({cgroup, memory, heapinfo, cpus, username, product_name, env});
+  let pid = process.pid;
+
+  res.send({cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid});
 });
 
 const port = process.env.PORT || 8080;
