@@ -13,17 +13,15 @@ function handle(signal) {
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
 
-app.get('/', (req, res) => {
-  console.log('Received a request.');
-
+function getInfo() {
   const files = [
-      "/sys/fs/cgroup/memory/memory.usage_in_bytes",
-      "/sys/fs/cgroup/memory/memory.limit_in_bytes",
-      "/sys/fs/cgroup/cpu/cpuacct.usage",
-      "/sys/fs/cgroup/cpu/cpu.shares",
-      "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
-      "/sys/fs/cgroup/cpu/cpu.cfs_period_us",
-      ]
+    "/sys/fs/cgroup/memory/memory.usage_in_bytes",
+    "/sys/fs/cgroup/memory/memory.limit_in_bytes",
+    "/sys/fs/cgroup/cpu/cpuacct.usage",
+    "/sys/fs/cgroup/cpu/cpu.shares",
+    "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+    "/sys/fs/cgroup/cpu/cpu.cfs_period_us",
+    ]
 
   let cgroup = {};
   for (let f of files) {
@@ -51,17 +49,26 @@ app.get('/', (req, res) => {
   } catch(e) {
     console.error(`Cannot read /sys/class/dmi/id/product_name`, e);
   }
-  
+
   let env = process.env;
 
   let heapinfo = v8.getHeapStatistics();
 
   let pid = process.pid;
 
-  res.send({cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid});
+  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid};
+}
+
+app.get('/', (req, res) => {
+  console.log('Received a request.');
+  res.send(getInfo());
 });
 
+console.log("Container info:");
+console.log(getInfo());
+
+console.log("Starting server");
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log('Hello world listening on port', port);
+  console.log('Listening on port', port);
 });
