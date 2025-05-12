@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Return some memory, CPU and cgroup info about the current container",
   "main": "index.js",
-  "bin": "index.js"
+  "bin": "index.js",
   "scripts": {
     "start": "node index.js"
   },
