@@ -16,7 +16,7 @@ function handle(signal) {
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
 
-async function getInfo() {
+async function getInfo(path) {
   const files = [
     "/sys/fs/cgroup/memory/memory.usage_in_bytes",
     "/sys/fs/cgroup/memory/memory.limit_in_bytes",
@@ -59,19 +59,20 @@ async function getInfo() {
 
   let pid = process.pid;
 
-  let disk = await checkDiskSpace('/');
+  let disk = await checkDiskSpace(path);
 
   return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk};
 }
 
-app.get('/', async (req, res) => {
-  console.log('Received a request.');
-  res.send(await getInfo());
+app.get('*', async (req, res) => {
+  const path = req.path || '/';
+  console.log(`Received a request for path ${path}`);
+  res.send(await getInfo(path));
 });
 
-console.log("Container info:");
+console.log("Container info for '/':");
 (async () => {
-  console.log(await getInfo());
+  console.log(await getInfo('/'));
 })();
 
 console.log("Starting server");
