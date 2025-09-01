@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const os = require("node:os");
 const v8 = require("node:v8");
 const process = require('node:process');
+const checkDiskSpace = require('check-disk-space').default;
 
 function handle(signal) {
   console.log(`Received signal ${signal}`);
@@ -15,7 +16,7 @@ function handle(signal) {
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
 
-function getInfo() {
+async function getInfo() {
   const files = [
     "/sys/fs/cgroup/memory/memory.usage_in_bytes",
     "/sys/fs/cgroup/memory/memory.limit_in_bytes",
@@ -58,16 +59,20 @@ function getInfo() {
 
   let pid = process.pid;
 
-  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid};
+  let disk = await checkDiskSpace('/');
+
+  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk};
 }
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   console.log('Received a request.');
-  res.send(getInfo());
+  res.send(await getInfo());
 });
 
 console.log("Container info:");
-console.log(getInfo());
+(async () => {
+  console.log(await getInfo());
+})();
 
 console.log("Starting server");
 const port = process.env.PORT || 8080;
