@@ -69,7 +69,19 @@ async function getInfo(path) {
     gpu = "No GPU info because nvidia-smi not found";
   }
 
-  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk, gpu};
+  let os_info = {};
+  try {
+    os_info.uname = execSync('uname -a').toString();
+  } catch (e) {
+    os_info.uname = "uname not found";
+  }
+  try {
+    os_info.release = fs.readFileSync('/etc/os-release', 'utf8');
+  } catch (e) {
+    os_info.release = "os-release not found";
+  }
+
+  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk, gpu, os: os_info};
 }
 
 app.get('*', async (req, res) => {
