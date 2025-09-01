@@ -15,6 +15,7 @@ The following information is returned:
 *   **Process ID**: The PID of the process.
 *   **Product Name**: The product name of the machine.
 *   **Disk Space**: Information about the disk space of a given path.
+*   **GPU Information**: Information about the GPUs of the host node (if `nvidia-smi` is available).
 
 ## Usage
 

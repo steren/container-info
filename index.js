@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const os = require("node:os");
 const v8 = require("node:v8");
 const process = require('node:process');
+const { execSync } = require('child_process');
 const checkDiskSpace = require('check-disk-space').default;
 
 function handle(signal) {
@@ -61,7 +62,14 @@ async function getInfo(path) {
 
   let disk = await checkDiskSpace(path);
 
-  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk};
+  let gpu;
+  try {
+    gpu = execSync('nvidia-smi').toString();
+  } catch (e) {
+    gpu = "No GPU info because nvidia-smi not found";
+  }
+
+  return {cgroup, memory, heapinfo, cpus, username, product_name, env, availableParallelism, pid, disk, gpu};
 }
 
 app.get('*', async (req, res) => {
